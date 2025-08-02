@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Astro Starter Kit: Basics
 
 ```sh
@@ -50,3 +51,7 @@ All commands are run from the root of the project, from a terminal:
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+=======
+# nouveau-site-zbb
+Le nouveau site de ZBB sous Astro
+>>>>>>> 3d6f41497844d72b3553f42dafefa5a1560919b9
