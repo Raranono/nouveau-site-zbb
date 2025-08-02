@@ -1,0 +1,106 @@
+---
+const images = [
+  "/images/banner.jpg",
+  "/images/braderie.jpg",
+  "/images/dimanche.jpg",
+  "/images/lyon.jpg",
+  "/images/rennes.jpg",
+  "/images/toulon.jpg",
+];
+---
+
+<script type="module" is:inline>
+  let currentIndex = 0;
+  const intervalTime = 5000;
+  let intervalId;
+
+  function showImage(index) {
+    const imgs = document.querySelectorAll("[data-carousel-img]");
+    const dots = document.querySelectorAll("[data-carousel-dot]");
+
+    imgs.forEach((img, i) => {
+      img.classList.toggle("opacity-100", i === index);
+      img.classList.toggle("opacity-0", i !== index);
+      img.classList.toggle("z-10", i === index);
+      img.classList.toggle("z-0", i !== index);
+    });
+
+    dots.forEach((dot, i) => {
+      dot.classList.toggle("bg-[#F4106F]", i === index);
+      dot.classList.toggle("bg-[#F4106F]/50", i !== index);
+    });
+  }
+
+  function nextImage() {
+    currentIndex = (currentIndex + 1) % images.length;
+    showImage(currentIndex);
+  }
+
+  function prevImage() {
+    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    showImage(currentIndex);
+  }
+
+  function resetTimer() {
+    clearInterval(intervalId);
+    intervalId = setInterval(nextImage, intervalTime);
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    showImage(currentIndex);
+    intervalId = setInterval(nextImage, intervalTime);
+
+    document.querySelectorAll("[data-carousel-dot]").forEach((dot, i) => {
+      dot.addEventListener("click", () => {
+        currentIndex = i;
+        showImage(currentIndex);
+        resetTimer();
+      });
+    });
+
+    const container = document.getElementById("carousel");
+    let startX = 0;
+    let endX = 0;
+
+    container.addEventListener("touchstart", (e) => {
+      startX = e.touches[0].clientX;
+    });
+
+    container.addEventListener("touchend", (e) => {
+      endX = e.changedTouches[0].clientX;
+      if (startX - endX > 50) {
+        nextImage();
+        resetTimer();
+      } else if (endX - startX > 50) {
+        prevImage();
+        resetTimer();
+      }
+    });
+  });
+</script>
+
+<div
+  id="carousel"
+  class="relative w-full max-w-4xl mx-auto aspect-video overflow-hidden rounded-xl shadow-md bg-black"
+>
+  <!-- Images -->
+  {images.map((src, i) => (
+    <img
+      src={src}
+      alt={`Image ${i + 1}`}
+      data-carousel-img
+      class="absolute inset-0 w-full h-full object-cover transition-opacity duration-700 ease-in-out opacity-0 z-0"
+    />
+  ))}
+
+    <!-- Dots -->
+    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+    {images.map((_, i) => (
+        <button
+        data-carousel-dot
+        class="w-5 h-5 rounded-full bg-[#F4106F]/50 border border-white hover:bg-[#F4106F] transition-all duration-300 cursor-pointer"
+        aria-label={`Image ${i + 1}`}
+        ></button>
+    ))}
+    </div>
+</div>
