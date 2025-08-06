@@ -7,7 +7,7 @@ interface Props {
 	image?: string;
 }
 
-const { title, description = "La joyeuse fanfare de l'Ecole Centrale de Lille", image = "/images/band.jpg" } = Astro.props;
+const { title, description = "La joyeuse fanfare de l'Ecole Centrale de Lille", image = "/images/banner.jpg" } = Astro.props;
 ---
 
 <!doctype html>
@@ -21,7 +21,7 @@ const { title, description = "La joyeuse fanfare de l'Ecole Centrale de Lille", 
 		<meta property="og:image" content={image} />
 		<title>{title}</title>
 	</head>
-	<body class="min-h-screen">
+	<body class="min-h-screen flex flex-col">
 		<slot />
 	</body>
 </html>
