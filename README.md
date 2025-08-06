@@ -1,4 +1,4 @@
 Dependances :
 
-Astro
+Astro <br>
 Tailwind
