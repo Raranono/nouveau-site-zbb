@@ -8,12 +8,19 @@ const images = [
   "/images/toulon.jpg",
 ];
 ---
+<!-- Script défilement -->
 
 <script type="module" is:inline>
-  let currentIndex = 0;
-  const intervalTime = 5000;
+  // Récupération des images du carousel depuis l'attribut data-images de la DIV (le JSON.Stringify passait pas pour je ne sais quelle raison)
+  const carousel = document.getElementById('carousel');
+  const clientImages = JSON.parse(carousel.getAttribute('data-images'));
+
+
+  let currentIndex = 0; // Index de l'image actuellement affichée
+  const intervalTime = 5000;   // Intervalle de défilement automatique (5s)
   let intervalId;
 
+  // Affichage image correspondant à l'index donné
   function showImage(index) {
     const imgs = document.querySelectorAll("[data-carousel-img]");
     const dots = document.querySelectorAll("[data-carousel-dot]");
@@ -31,33 +38,42 @@ const images = [
     });
   }
 
+  // Passage à l'image suivante
   function nextImage() {
-    currentIndex = (currentIndex + 1) % images.length;
+    currentIndex = (currentIndex + 1) % clientImages.length;
     showImage(currentIndex);
   }
 
+  // Passage à l'image précédente
   function prevImage() {
-    currentIndex = (currentIndex - 1 + images.length) % images.length;
+    currentIndex = (currentIndex - 1 + clientImages.length) % clientImages.length;
     showImage(currentIndex);
   }
 
+  // Reset le timer de défilement automatique (quand interaction utilisateur)
   function resetTimer() {
     clearInterval(intervalId);
     intervalId = setInterval(nextImage, intervalTime);
   }
 
+  // Exécuter le script quand page chargée
   window.addEventListener("DOMContentLoaded", () => {
-    showImage(currentIndex);
+
+    showImage(currentIndex); // Affichage image 0
+
+    // Lancement défilement automatique
     intervalId = setInterval(nextImage, intervalTime);
 
+    // Gestion de la navigation manuelle
     document.querySelectorAll("[data-carousel-dot]").forEach((dot, i) => {
       dot.addEventListener("click", () => {
         currentIndex = i;
         showImage(currentIndex);
-        resetTimer();
+        resetTimer(); // On remet le timer à zéro après un clic
       });
     });
 
+    // Gestion du swipe sur mobile
     const container = document.getElementById("carousel");
     let startX = 0;
     let endX = 0;
@@ -79,8 +95,10 @@ const images = [
   });
 </script>
 
+<!-- Carousel -->
 <div
   id="carousel"
+  data-images={JSON.stringify(images)}
   class="relative w-full max-w-4xl mx-auto aspect-video overflow-hidden rounded-xl shadow-md bg-black"
 >
   <!-- Images -->
@@ -93,14 +111,14 @@ const images = [
     />
   ))}
 
-    <!-- Dots -->
-    <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 z-20">
+  <!-- Points de navigation -->
+  <div class="absolute bottom-4 left-1/2 -translate-x-1/2 flex gap-3 z-20">
     {images.map((_, i) => (
-        <button
+      <button
         data-carousel-dot
         class="w-5 h-5 rounded-full bg-[#F4106F]/50 border border-white hover:bg-[#F4106F] transition-all duration-300 cursor-pointer"
         aria-label={`Image ${i + 1}`}
-        ></button>
+      ></button>
     ))}
-    </div>
+  </div>
 </div>
