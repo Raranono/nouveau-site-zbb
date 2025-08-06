@@ -8,5 +8,6 @@ export default defineConfig({
   vite: {
     plugins: [tailwindcss()]
   },
-  site: 'https://raranono.github.io'
+  site: 'https://raranono.github.io',
+  base: '/nouveau-site-zbb'
 });
